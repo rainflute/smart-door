@@ -1,5 +1,5 @@
 import json
-import door
+#import door
 
 
 class ShadowCallbackContainer:
@@ -16,9 +16,11 @@ class ShadowCallbackContainer:
     def handle(self, deltaMessage):
         try:
             if deltaMessage == 'open':
-                door.open()
+                # door.open()
+                print('open')
             elif deltaMessage == 'lock':
-                door.lock()
+                # door.lock()
+                print('closed')
             return deltaMessage
         except RuntimeError:
             if deltaMessage == 'open':
