@@ -1,5 +1,5 @@
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTShadowClient
-import shadowCallBackContainer
+from shadowCallBackContainer import ShadowCallBackContainer
 import os
 
 host = "a108by5cx6oj8b.iot.us-west-2.amazonaws.com"
@@ -23,7 +23,7 @@ myAWSIoTMQTTShadowClient.connect()
 # Create a deviceShadow with persistent subscription
 Bot = myAWSIoTMQTTShadowClient.createShadowHandlerWithName("door", True)
 
-callbackContainer = shadowCallBackContainer.ShadowCallbackContainer(Bot)
+callbackContainer = ShadowCallBackContainer.ShadowCallbackContainer(Bot)
 # Initialize door
 Bot.shadowGet(callbackContainer.initializeDoor)
 # Listen on deltas
