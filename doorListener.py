@@ -6,7 +6,7 @@ host = "a108by5cx6oj8b.iot.us-west-2.amazonaws.com"
 keyPath = os.path.dirname(os.path.abspath(__file__)) + '/../keys'
 rootCAPath = keyPath + '/root-CA.crt'
 privateKeyPath = keyPath + '/door.private.key'
-certificatePath = keyPath + '/door.cert.pem'
+certificatePath = keyPath + '/door.crt.pem'
 
 myAWSIoTMQTTShadowClient = AWSIoTMQTTShadowClient("door")
 myAWSIoTMQTTShadowClient.configureEndpoint(host, 8883)
