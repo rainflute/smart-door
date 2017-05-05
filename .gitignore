@@ -1,2 +1,5 @@
 .idea
+.idea/*
 aws-iot-device-sdk-python
+__pychache__
+__pychache__/*

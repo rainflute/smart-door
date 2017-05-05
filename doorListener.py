@@ -28,7 +28,7 @@ class ShadowCallbackContainer:
             elif deltaMessage == 'lock':
                 return 'open'
 
-    def initializeDoor(self, payload):
+    def initializeDoor(self, payload, responseStatus, token):
         payloadDict = json.loads(payload)
         status = json.dumps(payloadDict["state"]['reported']['status'])
         status = self.handle(status)
@@ -39,7 +39,7 @@ host = "a108by5cx6oj8b.iot.us-west-2.amazonaws.com"
 keyPath = os.path.dirname(os.path.abspath(__file__)) + '/../keys'
 rootCAPath = keyPath + '/root-CA.crt'
 privateKeyPath = keyPath + '/door.private.key'
-certificatePath = keyPath + '/door.crt.pem'
+certificatePath = keyPath + '/door.cert.pem'
 
 myAWSIoTMQTTShadowClient = AWSIoTMQTTShadowClient("door")
 myAWSIoTMQTTShadowClient.configureEndpoint(host, 8883)
