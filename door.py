@@ -12,7 +12,7 @@ def lock():
         p.ChangeDutyCycle(12.0)
         sleep(0.5)
         p.stop()
-        return 'Door locked'
+        print ('Door locked')
     except KeyboardInterrupt:
         GPIO.cleanup()
 
@@ -27,6 +27,6 @@ def open():
         p.ChangeDutyCycle(2.7)
         sleep(0.5)
         p.stop()
-        return 'Door opened'
+        print('Door opened')
     except KeyboardInterrupt:
         GPIO.cleanup()
