@@ -13,7 +13,7 @@ class ShadowCallbackContainer:
         payloadDict = json.loads(payload)
         deltaMessage = json.dumps(payloadDict["state"]['status'])
         deltaMessage = self.handle(deltaMessage)
-        newPayload = '{"state":{"reported":' + deltaMessage + '}}'
+        newPayload = '{"state":{"reported":{"status":' + deltaMessage + '}}}'
         self.client.shadowUpdate(newPayload, None, 5)
 
     def handle(self, deltaMessage):
@@ -37,9 +37,10 @@ class ShadowCallbackContainer:
         status = json.dumps(payloadDict["state"]['reported']['status'])
         self.currentStatus = status
         status = self.handle(status)
-        newPayload = '{"state":{"reported":' + status + '}}'
+        newPayload = '{"state":{"reported":{"status":' + status + '}}}'
         self.client.shadowUpdate(newPayload, None, 5)
         print('initialized!')
+
 host = "a108by5cx6oj8b.iot.us-west-2.amazonaws.com"
 keyPath = os.path.dirname(os.path.abspath(__file__)) + '/../keys'
 rootCAPath = keyPath + '/root-CA.crt'
