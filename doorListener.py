@@ -41,32 +41,37 @@ class ShadowCallbackContainer:
         self.client.shadowUpdate(newPayload, None, 5)
         print('initialized!')
 
+def customCallback(client, userdata, message):
+    deltaMessage = message.payload
+    if deltaMessage == '"open"':
+        # door.open()
+        print('Door Opened')
+
+    elif deltaMessage == '"lock"':
+        # door.lock()
+        print('Door Locked')
+
+
 host = "a108by5cx6oj8b.iot.us-west-2.amazonaws.com"
 keyPath = os.path.dirname(os.path.abspath(__file__)) + '/../keys'
 rootCAPath = keyPath + '/root-CA.crt'
 privateKeyPath = keyPath + '/door.private.key'
 certificatePath = keyPath + '/door.cert.pem'
 
-myAWSIoTMQTTShadowClient = AWSIoTMQTTShadowClient("door")
-myAWSIoTMQTTShadowClient.configureEndpoint(host, 8883)
-myAWSIoTMQTTShadowClient.configureCredentials(rootCAPath, privateKeyPath, certificatePath)
+myAWSIoTMQTTClient = AWSIoTMQTTClient("basicPubSub")
+myAWSIoTMQTTClient.configureEndpoint(host, 8883)
+myAWSIoTMQTTClient.configureCredentials(rootCAPath, privateKeyPath, certificatePath)
 
-# AWSIoTMQTTShadowClient configuration
-myAWSIoTMQTTShadowClient.configureAutoReconnectBackoffTime(1, 32, 20)
-myAWSIoTMQTTShadowClient.configureConnectDisconnectTimeout(10)  # 10 sec
-myAWSIoTMQTTShadowClient.configureMQTTOperationTimeout(5)  # 5 sec
+# AWSIoTMQTTClient connection configuration
+myAWSIoTMQTTClient.configureAutoReconnectBackoffTime(1, 32, 20)
+myAWSIoTMQTTClient.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
+myAWSIoTMQTTClient.configureDrainingFrequency(2)  # Draining: 2 Hz
+myAWSIoTMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
+myAWSIoTMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
-# Connect to AWS IoT
-myAWSIoTMQTTShadowClient.connect()
-
-# Create a deviceShadow with persistent subscription
-Bot = myAWSIoTMQTTShadowClient.createShadowHandlerWithName("door", True)
-
-callbackContainer = ShadowCallbackContainer(Bot)
-# Initialize door
-Bot.shadowGet(callbackContainer.initializeDoor, 5)
-# Listen on deltas
-Bot.shadowRegisterDeltaCallback(callbackContainer.call_back_delta)
+# Connect and subscribe to AWS IoT
+myAWSIoTMQTTClient.connect()
+myAWSIoTMQTTClient.subscribe("door/status", 1, customCallback)
 
 # Loop forever
 while True:
