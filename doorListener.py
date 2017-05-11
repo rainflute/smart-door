@@ -7,6 +7,7 @@ import door
 class ShadowCallbackContainer:
     def __init__(self, client):
         self.client = client
+        self.currentStatus = ''
 
     def call_back_delta(self, payload, responseStatus, token):
         payloadDict = json.loads(payload)
@@ -17,23 +18,24 @@ class ShadowCallbackContainer:
 
     def handle(self, deltaMessage):
         try:
-            if deltaMessage == 'open':
+            if deltaMessage == '"open"':
                 # door.open()
                 print('Door Opened')
-            elif deltaMessage == 'lock':
+                self.currentStatus = '"open"'
+            elif deltaMessage == '"lock"':
                 # door.lock()
                 print('Door Locked')
-            return deltaMessage
+                self.currentStatus = '"lock"'
+            else:
+                raise RuntimeError('Wrong action')
+            return self.currentStatus
         except RuntimeError:
-            print('Exception caught')
-            if deltaMessage == 'open':
-                return 'lock'
-            elif deltaMessage == 'lock':
-                return 'open'
+            return self.currentStatus
 
     def initializeDoor(self, payload, responseStatus, token):
         payloadDict = json.loads(payload)
         status = json.dumps(payloadDict["state"]['reported']['status'])
+        self.currentStatus = status
         status = self.handle(status)
         newPayload = '{"state":{"reported":' + status + '}}'
         self.client.shadowUpdate(newPayload, None, 5)
