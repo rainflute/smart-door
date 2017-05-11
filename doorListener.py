@@ -1,4 +1,4 @@
-from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTShadowClient
+from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 import os
 import json
 import door
