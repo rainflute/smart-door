@@ -10,7 +10,7 @@ class ShadowCallbackContainer:
 
     def call_back_delta(self, payload, responseStatus, token):
         payloadDict = json.loads(payload)
-        deltaMessage = json.dumps(payloadDict["state"])
+        deltaMessage = json.dumps(payloadDict["state"]['status'])
         deltaMessage = self.handle(deltaMessage)
         newPayload = '{"state":{"reported":' + deltaMessage + '}}'
         self.client.shadowUpdate(newPayload, None, 5)
@@ -18,11 +18,14 @@ class ShadowCallbackContainer:
     def handle(self, deltaMessage):
         try:
             if deltaMessage == 'open':
-                door.open()
+                # door.open()
+                print('Door Opened')
             elif deltaMessage == 'lock':
-                door.lock()
+                # door.lock()
+                print('Door Locked')
             return deltaMessage
         except RuntimeError:
+            print('Exception caught')
             if deltaMessage == 'open':
                 return 'lock'
             elif deltaMessage == 'lock':
@@ -34,7 +37,7 @@ class ShadowCallbackContainer:
         status = self.handle(status)
         newPayload = '{"state":{"reported":' + status + '}}'
         self.client.shadowUpdate(newPayload, None, 5)
-
+        print('initialized!')
 host = "a108by5cx6oj8b.iot.us-west-2.amazonaws.com"
 keyPath = os.path.dirname(os.path.abspath(__file__)) + '/../keys'
 rootCAPath = keyPath + '/root-CA.crt'
