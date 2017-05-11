@@ -58,7 +58,7 @@ Bot = myAWSIoTMQTTShadowClient.createShadowHandlerWithName("door", True)
 
 callbackContainer = ShadowCallbackContainer(Bot)
 # Initialize door
-Bot.shadowGet(callbackContainer.initializeDoor)
+Bot.shadowGet(callbackContainer.initializeDoor, 5)
 # Listen on deltas
 Bot.shadowRegisterDeltaCallback(callbackContainer.call_back_delta)
 
