@@ -43,11 +43,11 @@ class ShadowCallbackContainer:
 
 def customCallback(client, userdata, message):
     deltaMessage = message.payload
-    if deltaMessage == '"open"':
+    if deltaMessage == 'open':
         # door.open()
         print('Door Opened')
 
-    elif deltaMessage == '"lock"':
+    elif deltaMessage == 'lock':
         # door.lock()
         print('Door Locked')
 
